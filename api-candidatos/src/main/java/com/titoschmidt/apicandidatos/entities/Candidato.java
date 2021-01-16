@@ -1,11 +1,15 @@
 package com.titoschmidt.apicandidatos.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 
 @Entity
 public class Candidato implements Serializable {
@@ -19,6 +23,10 @@ public class Candidato implements Serializable {
 	private Integer idade;
 	private String url;
 	
+	@ManyToMany
+	@JoinColumn(name = "tecnologia_id")
+	private List<Tecnologia> tecnologias = new ArrayList<>();
+	
 	public Candidato() {
 		
 	}
@@ -26,6 +34,7 @@ public class Candidato implements Serializable {
 	public Candidato(Long id, String nome, String email, Integer idade, String url) {
 		super();
 		this.id = id;
+		this.nome = nome;
 		this.email = email;
 		this.idade = idade;
 		this.url = url;
@@ -94,5 +103,5 @@ public class Candidato implements Serializable {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
-	}	
+	}		
 }
