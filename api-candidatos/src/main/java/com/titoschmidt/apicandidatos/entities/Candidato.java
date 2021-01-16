@@ -14,6 +14,7 @@ public class Candidato implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	private String nome;
 	private String email;
 	private Integer idade;
 	private String url;
@@ -22,7 +23,7 @@ public class Candidato implements Serializable {
 		
 	}
 
-	public Candidato(Long id, String email, Integer idade, String url) {
+	public Candidato(Long id, String nome, String email, Integer idade, String url) {
 		super();
 		this.id = id;
 		this.email = email;
@@ -36,6 +37,14 @@ public class Candidato implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
 
 	public String getEmail() {
