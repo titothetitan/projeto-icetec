@@ -10,6 +10,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 public class Tecnologia implements Serializable {
@@ -20,8 +24,8 @@ public class Tecnologia implements Serializable {
 	private Long id;
 	private String nome;
 	
-	@ManyToMany
-	@JoinColumn(name = "candidato_id")
+	@ManyToMany(mappedBy="tecnologias")
+	@JsonManagedReference
 	private List<Candidato> candidatos = new ArrayList<>();
 	
 	public Tecnologia() {

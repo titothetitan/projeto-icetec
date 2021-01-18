@@ -9,7 +9,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 public class Candidato implements Serializable {
@@ -17,34 +21,39 @@ public class Candidato implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private Integer id;
 	private String nome;
 	private String email;
 	private Integer idade;
 	private String url;
 	
+	@JsonBackReference
 	@ManyToMany
-	@JoinColumn(name = "tecnologia_id")
+	@JoinTable(name = "CANDIDATO_TECNOLOGIA",
+			   joinColumns = @JoinColumn(name="candidato_id"),
+			   inverseJoinColumns = @JoinColumn(name="tecnologia_id")
+	)
 	private List<Tecnologia> tecnologias = new ArrayList<>();
 	
 	public Candidato() {
 		
 	}
-
-	public Candidato(Long id, String nome, String email, Integer idade, String url) {
+	
+	public Candidato(Integer id, String nome, String email, Integer idade, String url, List<Tecnologia> tecnologias) {
 		super();
 		this.id = id;
 		this.nome = nome;
 		this.email = email;
 		this.idade = idade;
 		this.url = url;
+		this.tecnologias = tecnologias;
 	}
 
-	public Long getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 	
@@ -78,6 +87,14 @@ public class Candidato implements Serializable {
 
 	public void setUrl(String url) {
 		this.url = url;
+	}
+	
+	public List<Tecnologia> getTecnologias() {
+		return tecnologias;
+	}
+
+	public void setTecnologias(List<Tecnologia> tecnologias) {
+		this.tecnologias = tecnologias;
 	}
 
 	@Override

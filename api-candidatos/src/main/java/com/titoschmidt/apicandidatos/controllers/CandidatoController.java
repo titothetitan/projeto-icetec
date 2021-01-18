@@ -3,6 +3,7 @@ package com.titoschmidt.apicandidatos.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,58 +12,46 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import com.titoschmidt.apicandidatos.entities.Candidato;
 import com.titoschmidt.apicandidatos.repositories.CandidatoRepository;
+import com.titoschmidt.apicandidatos.services.CandidatoService;
 
 @RestController
 @RequestMapping(value="/candidatos")
 public class CandidatoController {
 	
 	@Autowired
-	private CandidatoRepository candidatoRepository;
+	private CandidatoService service;
 	
 	//INSERIR
-	@PostMapping
+	@RequestMapping(method=RequestMethod.POST)
 	public Candidato save(@RequestBody Candidato candidato) {
-		return candidatoRepository.save(candidato);
+		return service.insert(candidato);
 	}
 	
 	// BUSCAR
-	@GetMapping(value = "/{id}")
-	public ResponseEntity<Candidato> findById(@PathVariable Long id) {
-		Candidato candidato = candidatoRepository.findById(id).get();
+	@RequestMapping(value="/{id}", method=RequestMethod.GET)
+	public ResponseEntity<Candidato> findById(@PathVariable Integer id) {
+		Candidato candidato = service.find(id).get();
 		return ResponseEntity.ok().body(candidato);
 	}
 	
 	//ATUALIZAR
-	@PutMapping(value="/{id}")
-	public ResponseEntity update(@PathVariable("id") long id, @RequestBody Candidato candidato) {
-	   return candidatoRepository.findById(id)
-	           .map(record -> {
-	               record.setNome(candidato.getNome());
-	               record.setEmail(candidato.getEmail());
-	               record.setIdade(candidato.getIdade());
-	               record.setUrl(candidato.getUrl());
-	               Candidato updated = candidatoRepository.save(record);
-	               return ResponseEntity.ok().body(updated);
-	           }).orElse(ResponseEntity.notFound().build());
-	}
+	/**/
 	
 	//EXCLUIR
-	@DeleteMapping(path ={"/{id}"})
-	public ResponseEntity<Object> delete(@PathVariable long id) {
-	   return candidatoRepository.findById(id)
-	           .map(record -> {
-	        	   candidatoRepository.deleteById(id);
-	               return ResponseEntity.ok().build();
-	           }).orElse(ResponseEntity.notFound().build());
+	@RequestMapping(path="/{id}", method=RequestMethod.DELETE)
+	public ResponseEntity<Object> delete(@PathVariable int id) {
+		service.delete(id);
+		return ResponseEntity.noContent().build();
 	}
 	
 	// LISTAR
-	@GetMapping 
+	@RequestMapping(method=RequestMethod.GET)
 	public ResponseEntity<List<Candidato>> findAll() { 
-		List<Candidato> list = candidatoRepository.findAll();  		
+		List<Candidato> list = service.findAll();  		
 		return ResponseEntity.ok().body(list);
 	}
 }

@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.titoschmidt.apicandidatos.entities.Candidato;
 
 @Repository
-public interface CandidatoRepository extends JpaRepository<Candidato, Long> {
+public interface CandidatoRepository extends JpaRepository<Candidato, Integer> {
 
 }
